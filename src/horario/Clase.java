@@ -50,4 +50,22 @@ public class Clase {
     public void setDias(boolean[] dias) {
         this.dias = dias;
     }
+
+    public boolean cruzaCon(Clase clase2) {
+        boolean cumple = true;
+        cicloDias:
+        for (int i = 0; i < 7; i++) {
+            if (clase2.getDias()[i] == this.dias[i]) {
+                cumple = true;
+                break;
+            }
+        }
+        if(!cumple){
+            return false;
+        }
+        if (clase2.horaInicio > this.horaInicio && clase2.horaInicio < this.horaFin) {
+            return true;
+        }
+        return clase2.horaFin < this.horaFin && clase2.horaFin > this.horaInicio;
+    }
 }

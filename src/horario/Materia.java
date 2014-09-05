@@ -61,16 +61,9 @@ public class Materia implements Serializable {
         Clase clase1, clase2;
         for (int i = 0; i < materia.getClases().size(); i++) {
             clase1 = materia.getClases().get(i);
-            int horaInicio = clase1.getHoraInicio();
-            int horaFin = clase1.getHoraFin();
             for (int j = 0; j < materia.getClases().size(); j++) {
                 clase2 = clases.get(j);
-                int horaInicio2 = clase2.getHoraInicio();
-                int horaFin2 = clase2.getHoraFin();
-                if(horaInicio2>horaInicio && horaInicio2<horaFin){
-                    return true;
-                }
-                if(horaFin2<horaFin && horaFin2>horaInicio){
+                if (clase1.cruzaCon(clase2)) {
                     return true;
                 }
             }
