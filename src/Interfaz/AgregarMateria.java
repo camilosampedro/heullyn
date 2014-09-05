@@ -38,7 +38,7 @@ public class AgregarMateria extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre:");
 
-        jButton1.setText("Agregar horario");
+        jButton1.setText("Agregar clase");
 
         jLabel2.setText("Grupo:");
 
