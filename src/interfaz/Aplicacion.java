@@ -97,9 +97,13 @@ public class Aplicacion extends javax.swing.JFrame {
         jListaMaterias = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        btnAcercaDe = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,6 +131,7 @@ public class Aplicacion extends javax.swing.JFrame {
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
 
+        jtHorario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jtHorario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"6", null, null, null, null, null, null},
@@ -158,6 +163,7 @@ public class Aplicacion extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtHorario.setRowMargin(2);
         jScrollPane1.setViewportView(jtHorario);
 
         jTabbedPane1.addTab("Horario", jScrollPane1);
@@ -172,6 +178,20 @@ public class Aplicacion extends javax.swing.JFrame {
         jTabbedPane1.addTab("Materias", jScrollPane2);
 
         jMenu1.setText("Archivo");
+
+        jMenuItem2.setText("Abrir");
+        jMenu1.add(jMenuItem2);
+
+        jMenu4.setText("Guardar");
+
+        jMenuItem4.setText("Horario completo");
+        jMenu4.add(jMenuItem4);
+
+        jMenuItem5.setText("Horario actual");
+        jMenu4.add(jMenuItem5);
+
+        jMenu1.add(jMenu4);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edición");
@@ -179,8 +199,13 @@ public class Aplicacion extends javax.swing.JFrame {
 
         jMenu3.setText("Ayuda");
 
-        jMenuItem1.setText("Acerca de...");
-        jMenu3.add(jMenuItem1);
+        btnAcercaDe.setText("Acerca de...");
+        btnAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcercaDeActionPerformed(evt);
+            }
+        });
+        jMenu3.add(btnAcercaDe);
 
         jMenuBar1.add(jMenu3);
 
@@ -323,6 +348,12 @@ public class Aplicacion extends javax.swing.JFrame {
         generarVector();
     }//GEN-LAST:event_jBtGuardarActionPerformed
 
+    private void btnAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDeActionPerformed
+        // TODO add your handling code here:
+        AcercaDe nueva = new AcercaDe();
+        nueva.setVisible(true);
+    }//GEN-LAST:event_btnAcercaDeActionPerformed
+
     public void agregarMateria(Materia mat) {
         horario.agregarMateria(mat);
         modeloLista.addElement("(" + mat.getGrupo() + ") " + mat.getNombre());
@@ -367,6 +398,7 @@ public class Aplicacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnAcercaDe;
     private javax.swing.JButton jBtAgregar;
     private javax.swing.JButton jBtGuardar;
     private javax.swing.JButton jBtSalir;
@@ -374,8 +406,11 @@ public class Aplicacion extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;

@@ -50,7 +50,7 @@ public class AgregarClase extends javax.swing.JFrame {
 
         jLabel2.setText("Grupo:");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Agregar materia");
         setResizable(false);
 

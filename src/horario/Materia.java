@@ -68,7 +68,7 @@ public class Materia implements Serializable {
         Clase clase1, clase2;
         for (int i = 0; i < materia.getClases().size(); i++) {
             clase1 = materia.getClases().get(i);
-            for (int j = 0; j < materia.getClases().size(); j++) {
+            for (int j = 0; j < clases.size(); j++) {
                 clase2 = clases.get(j);
                 if (clase1.cruzaCon(clase2)) {
                     return true;
