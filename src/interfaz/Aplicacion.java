@@ -10,6 +10,7 @@ import horario.Horario;
 import horario.Materia;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +23,7 @@ public class Aplicacion extends javax.swing.JFrame {
     private boolean[] vectorFlag;
     private int cantidad;
     private Horario horario;
+    private ArrayList<JCheckBox> checksMaterias;
 
     public void generarVector() {
         for (int i = 0; i < vectorFlag.length; i++) {
@@ -73,6 +75,7 @@ public class Aplicacion extends javax.swing.JFrame {
         vectorFlag = new boolean[100];
         cantidad = 0;
         horario = new Horario();
+        checksMaterias = new ArrayList();
         generarVector();
         //jTable1.setValueAt("Prueba", 0, 1);
 
@@ -95,12 +98,14 @@ public class Aplicacion extends javax.swing.JFrame {
         jtHorario = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListaMaterias = new javax.swing.JList();
+        jsMaterias = new javax.swing.JScrollPane();
+        jpMaterias = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        btnAbrir = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        btnGuardarHorarioCompleto = new javax.swing.JMenuItem();
+        btnGuardarHorarioActual = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         btnAcercaDe = new javax.swing.JMenuItem();
@@ -177,18 +182,23 @@ public class Aplicacion extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Materias", jScrollPane2);
 
+        jpMaterias.setLayout(new java.awt.GridLayout(0, 1));
+        jsMaterias.setViewportView(jpMaterias);
+
+        jTabbedPane1.addTab("Materias", jsMaterias);
+
         jMenu1.setText("Archivo");
 
-        jMenuItem2.setText("Abrir");
-        jMenu1.add(jMenuItem2);
+        btnAbrir.setText("Abrir");
+        jMenu1.add(btnAbrir);
 
         jMenu4.setText("Guardar");
 
-        jMenuItem4.setText("Horario completo");
-        jMenu4.add(jMenuItem4);
+        btnGuardarHorarioCompleto.setText("Horario completo");
+        jMenu4.add(btnGuardarHorarioCompleto);
 
-        jMenuItem5.setText("Horario actual");
-        jMenu4.add(jMenuItem5);
+        btnGuardarHorarioActual.setText("Horario actual");
+        jMenu4.add(btnGuardarHorarioActual);
 
         jMenu1.add(jMenu4);
 
@@ -218,7 +228,7 @@ public class Aplicacion extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jBtAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,8 +241,8 @@ public class Aplicacion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtSalir)
                     .addComponent(jBtAgregar)
@@ -356,10 +366,32 @@ public class Aplicacion extends javax.swing.JFrame {
 
     public void agregarMateria(Materia mat) {
         horario.agregarMateria(mat);
+        
+        //Creación del checkbox en la lista.
+        JCheckBox checkMateria = new JCheckBox("(" + mat.getGrupo() + ") " + mat.getNombre());
+        checkMateria.setVisible(true);
+        checkMateria.setSize(230, 30);
+        checksMaterias.add(checkMateria);
+        checkMateria.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchecksActionPerformed(evt);
+            }
+        });
+        jpMaterias.add(checkMateria);
+        jpMaterias.updateUI();
+        jsMaterias.updateUI();
+        this.paintAll(this.getGraphics());
+        //reescribirLista();
+        
         modeloLista.addElement("(" + mat.getGrupo() + ") " + mat.getNombre());
         jListaMaterias.setModel(modeloLista);
         limpiarHorario();
         generarVector();
+    }
+    
+    private void jchecksActionPerformed (java.awt.event.ActionEvent evt){
+        
     }
 
     /**
@@ -398,7 +430,10 @@ public class Aplicacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnAbrir;
     private javax.swing.JMenuItem btnAcercaDe;
+    private javax.swing.JMenuItem btnGuardarHorarioActual;
+    private javax.swing.JMenuItem btnGuardarHorarioCompleto;
     private javax.swing.JButton jBtAgregar;
     private javax.swing.JButton jBtGuardar;
     private javax.swing.JButton jBtSalir;
@@ -408,12 +443,12 @@ public class Aplicacion extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel jpMaterias;
+    private javax.swing.JScrollPane jsMaterias;
     private javax.swing.JTable jtHorario;
     // End of variables declaration//GEN-END:variables
+
 }
