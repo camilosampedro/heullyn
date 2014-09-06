@@ -15,6 +15,9 @@ import java.util.ArrayList;
  */
 public class Horario implements Serializable{
     private final ArrayList<Materia> materias;
+    public static final byte PUEDE = 0;
+    public static final byte CRUZA = 1;
+    public static final byte YAEXISTE = 2;
 
     public Horario() {
         materias = new ArrayList();
@@ -38,14 +41,21 @@ public class Horario implements Serializable{
         return suma;
     }
     
-    public boolean existe(Materia materia){
+    public byte existe(Materia materia){
         Materia materian;
         for (int i = 0;i<materias.size();i++){
             materian = materias.get(i);
             if(materia.equals(materian)){
-                return true;
+                return YAEXISTE;
+            }
+            if(materia.cruzaCon(materian)){
+                return CRUZA;
             }
         }
-        return false;
+        return PUEDE;
+    }
+
+    public ArrayList<Materia> getMaterias() {
+        return materias;
     }
 }

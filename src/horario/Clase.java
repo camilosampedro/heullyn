@@ -5,22 +5,31 @@
  */
 package horario;
 
+import java.io.Serializable;
+
 /**
  *
  * @author CamiloAndrés
  */
-public class Clase {
+public class Clase implements Serializable{
 
     private int horaInicio;
     private int horaFin;
-    private boolean[] dias;
+    private int dia;
     private static final String[] STRDIAS
             = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+    public static final byte LUNES = 0;
+    public static final byte MARTES = 1;
+    public static final byte MIERCOLES = 2;
+    public static final byte JUEVES = 3;
+    public static final byte VIERNES = 4;
+    public static final byte SABADO = 5;
+    public static final byte DOMINGO = 6;
 
-    public Clase(int horaInicio, int horaFin, boolean[] dias) {
+    public Clase(int horaInicio, int horaFin, int dia) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.dias = dias;
+        this.dia = dia;
     }
 
     public int getHoraInicio() {
@@ -31,8 +40,8 @@ public class Clase {
         return horaFin;
     }
 
-    public boolean[] getDias() {
-        return dias;
+    public int getDia() {
+        return dia;
     }
 
     public static String getStringDia(int dia) {
@@ -47,20 +56,8 @@ public class Clase {
         this.horaFin = horaFin;
     }
 
-    public void setDias(boolean[] dias) {
-        this.dias = dias;
-    }
-
     public boolean cruzaCon(Clase clase2) {
-        boolean cumple = true;
-        cicloDias:
-        for (int i = 0; i < 7; i++) {
-            if (clase2.getDias()[i] == this.dias[i]) {
-                cumple = true;
-                break;
-            }
-        }
-        if(!cumple){
+        if (clase2.getDia() != this.dia) {
             return false;
         }
         if (clase2.horaInicio > this.horaInicio && clase2.horaInicio < this.horaFin) {

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package interfaz;
+
+import horario.Clase;
 
 /**
  *
@@ -12,11 +13,19 @@ package interfaz;
  */
 public class AgregarClase extends javax.swing.JFrame {
 
+    AgregarMateria padre;
+    Clase clase;
+
     /**
      * Creates new form AgregarClase
      */
-    public AgregarClase() {
+    private AgregarClase() {
         initComponents();
+    }
+
+    public AgregarClase(AgregarMateria padre) {
+        initComponents();
+        this.padre = padre;
     }
 
     /**
@@ -28,58 +37,39 @@ public class AgregarClase extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jtfGrupo = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnAceptar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jcbDia = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jtfHoraInicio = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jtfHoraFin = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+
+        jLabel2.setText("Grupo:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Agregar materia");
         setResizable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"6",  new Boolean(false), null,  new Boolean(false), null, null, null},
-                {"7", null, null, null, null, null, null},
-                {"8", null, null, null, null, null, null},
-                {"9", null, null, null, null, null, null},
-                {"10", null, null, null, null, null, null},
-                {"11", null, null, null, null, null, null},
-                {"12", null, null, null, null, null, null},
-                {"13", null, null, null, null, null, null},
-                {"14", null, null, null, null, null, null},
-                {"15", null, null, null, null, null, null},
-                {"16", null, null, null, null, null, null},
-                {"17", null, null, null, null, null, null},
-                {"18", null, null, null, null, null, null},
-                {"19", null, null, null, null, null, null},
-                {"20", null, null, null, null, null, null},
-                {"21", null, null, null, null, null, null}
-            },
-            new String [] {
-                "Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, false, true, true, true, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton1.setText("Aceptar");
 
         jButton2.setText("Cancelar");
+
+        jcbDia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }));
+
+        jLabel1.setText("Día:");
+
+        jLabel3.setText("Hora inicio:");
+
+        jLabel4.setText("Hora fin:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,27 +78,57 @@ public class AgregarClase extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnAceptar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfHoraFin)
+                            .addComponent(jtfHoraInicio)
+                            .addComponent(jcbDia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnAceptar)
                     .addComponent(jButton2))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+        int horaInicio = Integer.parseInt(jtfHoraInicio.getText());
+        int horaFin = Integer.parseInt(jtfHoraFin.getText());
+        int dia = jcbDia.getSelectedIndex();
+        clase = new Clase(horaInicio, horaFin, dia);
+        padre.agregarClase(clase);
+        this.dispose();
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,9 +166,15 @@ public class AgregarClase extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton jButton2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JComboBox jcbDia;
+    private javax.swing.JTextField jtfGrupo;
+    private javax.swing.JTextField jtfHoraFin;
+    private javax.swing.JTextField jtfHoraInicio;
     // End of variables declaration//GEN-END:variables
 }

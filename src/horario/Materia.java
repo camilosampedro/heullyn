@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Materia implements Serializable {
 
-    private final String nombre;
+    private String nombre;
     private int creditos;
     private ArrayList<Clase> clases;
     private String grupo;
@@ -23,6 +23,10 @@ public class Materia implements Serializable {
         this.nombre = nombre;
         this.creditos = creditos;
         this.grupo = grupo;
+    }    
+
+    public Materia() {
+        clases = new ArrayList();
     }
 
     public void agregarClase(Clase clase) {
@@ -45,6 +49,9 @@ public class Materia implements Serializable {
         return nombre;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
     public void setCreditos(int creditos) {
         this.creditos = creditos;
     }
