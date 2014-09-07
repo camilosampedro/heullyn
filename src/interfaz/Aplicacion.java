@@ -23,7 +23,7 @@ public class Aplicacion extends javax.swing.JFrame {
     private boolean[] vectorFlag;
     private int cantidad;
     private Horario horario;
-    private ArrayList<JCheckBox> checksMaterias;
+    private ArrayList<Object[]> checksMaterias;
 
     public void generarVector() {
         for (int i = 0; i < vectorFlag.length; i++) {
@@ -366,12 +366,13 @@ public class Aplicacion extends javax.swing.JFrame {
 
     public void agregarMateria(Materia mat) {
         horario.agregarMateria(mat);
-        
+
         //Creación del checkbox en la lista.
         JCheckBox checkMateria = new JCheckBox("(" + mat.getGrupo() + ") " + mat.getNombre());
         checkMateria.setVisible(true);
         checkMateria.setSize(230, 30);
-        checksMaterias.add(checkMateria);
+        Object[] par = {checkMateria, mat};
+        checksMaterias.add(par);
         checkMateria.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,15 +384,16 @@ public class Aplicacion extends javax.swing.JFrame {
         jsMaterias.updateUI();
         this.paintAll(this.getGraphics());
         //reescribirLista();
-        
+
         modeloLista.addElement("(" + mat.getGrupo() + ") " + mat.getNombre());
         jListaMaterias.setModel(modeloLista);
         limpiarHorario();
         generarVector();
     }
-    
-    private void jchecksActionPerformed (java.awt.event.ActionEvent evt){
-        
+
+    private void jchecksActionPerformed(java.awt.event.ActionEvent evt) {
+        leerLista();
+        reescribirHorario();
     }
 
     /**
@@ -450,5 +452,13 @@ public class Aplicacion extends javax.swing.JFrame {
     private javax.swing.JScrollPane jsMaterias;
     private javax.swing.JTable jtHorario;
     // End of variables declaration//GEN-END:variables
+
+    private void reescribirHorario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void leerLista() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
