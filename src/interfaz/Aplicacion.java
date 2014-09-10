@@ -5,13 +5,28 @@
  */
 package interfaz;
 
+import render.Renderer;
 import horario.Clase;
 import horario.Horario;
 import horario.Materia;
+import java.awt.Color;
+import java.awt.Component;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -19,11 +34,13 @@ import javax.swing.JOptionPane;
  */
 public class Aplicacion extends javax.swing.JFrame {
 
-    private DefaultListModel modeloLista;
-    private boolean[] vectorFlag;
-    private int cantidad;
+    private final DefaultListModel modeloLista;
+    private final boolean[] vectorFlag;
+    private final int cantidad;
     private Horario horario;
     private ArrayList<Object[]> checksMaterias;
+    //ArrayList<ArrayList<Color>> colores;
+    Renderer render = new Renderer();
 
     public void generarVector() {
         for (int i = 0; i < vectorFlag.length; i++) {
@@ -63,6 +80,7 @@ public class Aplicacion extends javax.swing.JFrame {
                 false, false, false, false, false, false, false
             };
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -77,7 +95,6 @@ public class Aplicacion extends javax.swing.JFrame {
         horario = new Horario();
         checksMaterias = new ArrayList();
         generarVector();
-        //jTable1.setValueAt("Prueba", 0, 1);
 
     }
 
@@ -96,10 +113,9 @@ public class Aplicacion extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtHorario = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jListaMaterias = new javax.swing.JList();
         jsMaterias = new javax.swing.JScrollPane();
         jpMaterias = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         btnAbrir = new javax.swing.JMenuItem();
@@ -111,6 +127,7 @@ public class Aplicacion extends javax.swing.JFrame {
         btnAcercaDe = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Horario");
 
         jBtSalir.setText("Salir");
         jBtSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -136,6 +153,7 @@ public class Aplicacion extends javax.swing.JFrame {
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
 
+        //jtHorario.setDefaultRenderer(Object.class, render);
         jtHorario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jtHorario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -161,28 +179,27 @@ public class Aplicacion extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jtHorario.setColumnSelectionAllowed(true);
+        jtHorario.setGridColor(new java.awt.Color(76, 76, 76));
         jtHorario.setRowMargin(2);
         jScrollPane1.setViewportView(jtHorario);
 
         jTabbedPane1.addTab("Horario", jScrollPane1);
 
-        jListaMaterias.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jListaMateriasMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jListaMaterias);
-
-        jTabbedPane1.addTab("Materias", jScrollPane2);
-
         jpMaterias.setLayout(new java.awt.GridLayout(0, 1));
+
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Listado de materias");
+        jpMaterias.add(jLabel1);
+
         jsMaterias.setViewportView(jpMaterias);
 
         jTabbedPane1.addTab("Materias", jsMaterias);
@@ -190,14 +207,29 @@ public class Aplicacion extends javax.swing.JFrame {
         jMenu1.setText("Archivo");
 
         btnAbrir.setText("Abrir");
+        btnAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirActionPerformed(evt);
+            }
+        });
         jMenu1.add(btnAbrir);
 
         jMenu4.setText("Guardar");
 
         btnGuardarHorarioCompleto.setText("Horario completo");
+        btnGuardarHorarioCompleto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarHorarioCompletoActionPerformed(evt);
+            }
+        });
         jMenu4.add(btnGuardarHorarioCompleto);
 
-        btnGuardarHorarioActual.setText("Horario actual");
+        btnGuardarHorarioActual.setText("Generar lista con horario actual");
+        btnGuardarHorarioActual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarHorarioActualActionPerformed(evt);
+            }
+        });
         jMenu4.add(btnGuardarHorarioActual);
 
         jMenu1.add(jMenu4);
@@ -228,7 +260,7 @@ public class Aplicacion extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jBtAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -241,7 +273,7 @@ public class Aplicacion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtSalir)
@@ -264,96 +296,7 @@ public class Aplicacion extends javax.swing.JFrame {
         nueva.setVisible(true);
     }//GEN-LAST:event_jBtAgregarActionPerformed
 
-    private void jListaMateriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListaMateriasMouseClicked
-
-        boolean arreglameLaVida = false;
-        int i = jListaMaterias.getSelectedIndex();
-        int hI, hF, c = 0, tamano;
-        ArrayList<Materia> materias = horario.getMaterias();
-
-        Materia aux = materias.get(i);
-        tamano = jListaMaterias.getModel().getSize();
-        //JOptionPane.showMessageDialog(null, "Valor: "+vectorFlag[i], "Advertencia", JOptionPane.WARNING_MESSAGE);
-
-        if (vectorFlag[i] == false) {
-            for (int x = 0; x < tamano; x++) {
-                Materia materiaTemp = materias.get(x);
-                if ((materiaTemp.getNombre().equals(aux.getNombre())) && (materiaTemp.getGrupo().equals(aux.getGrupo()))) {//Busca los iguales
-                    ArrayList<Clase> clases = materiaTemp.getClases();
-                    for (int j = 0; j < clases.size(); j++) {
-                        c = 0;
-                        Clase clase = clases.get(j);
-                        hI = clase.getHoraInicio() - 6;
-                        hF = clase.getHoraFin() - 6;
-
-                        while ((hI + c) < hF) {
-                            if (jtHorario.getValueAt(hI + c, clase.getDia() + 1) == null) {
-                                c++;
-                            } else {
-                                arreglameLaVida = true;
-                                JOptionPane.showMessageDialog(null, "Cruce de horario", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!arreglameLaVida) {
-                for (int x = 0; x < tamano; x++) {
-                    Materia materiaTemp = (Materia) materias.get(x);
-                    if ((materiaTemp.getNombre().equals(aux.getNombre())) && (materiaTemp.getGrupo().equals(aux.getGrupo()))) {//Busca los iguales
-                        ArrayList<Clase> clases = materiaTemp.getClases();
-                        for (int j = 0; j < clases.size(); j++) {
-                            c = 0;
-                            Clase clase = clases.get(j);
-                            hI = clase.getHoraInicio() - 6;
-                            hF = clase.getHoraFin() - 6;
-                            while ((hI + c) < hF) {
-                                //JOptionPane.showMessageDialog(null, jTable1.getValueAt(hI+c, aux.getDia()), "Advertencia", JOptionPane.WARNING_MESSAGE);
-                                jtHorario.setValueAt("(" + materiaTemp.getGrupo() + ")" + materiaTemp.getNombre(), hI + c, clase.getDia() + 1);
-                                c++;
-
-                            }
-                            vectorFlag[x] = true;
-                        }
-                    }
-                }
-            }
-        } else {
-            for (int x = 0; x < tamano; x++) {
-                Materia materiaTemp = (Materia) materias.get(x);
-                if ((materiaTemp.getNombre().equals(aux.getNombre())) && (materiaTemp.getGrupo().equals(aux.getGrupo()))) {//Busca los iguales
-                    ArrayList<Clase> clases = materiaTemp.getClases();
-                    for (int j = 0; j < clases.size(); j++) {
-                        c = 0;
-                        Clase clase = clases.get(j);
-                        hI = clase.getHoraInicio() - 6;
-                        hF = clase.getHoraFin() - 6;
-
-                        while ((hI + c) < hF) {
-                            //JOptionPane.showMessageDialog(null, jTable1.getValueAt(hI+c, aux.getDia()), "Advertencia", JOptionPane.WARNING_MESSAGE);
-                            jtHorario.setValueAt(null, hI + c, clase.getDia() + 1);
-                            c++;
-                        }
-                        vectorFlag[x] = false;
-                    }
-                }
-            }
-        }
-
-
-    }//GEN-LAST:event_jListaMateriasMouseClicked
-
     private void jBtGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtGuardarActionPerformed
-        /* 
-         list.add(mat);
-         modeloLista.addElement("("+mat.getSalon()+") "+mat.getNombre());
-         jList1.setModel(modeloLista);
-
-         jTextField1.setText("");
-         jTextField2.setText("");
-         */
         limpiarHorario();
         generarVector();
     }//GEN-LAST:event_jBtGuardarActionPerformed
@@ -364,36 +307,34 @@ public class Aplicacion extends javax.swing.JFrame {
         nueva.setVisible(true);
     }//GEN-LAST:event_btnAcercaDeActionPerformed
 
+    private void btnGuardarHorarioCompletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarHorarioCompletoActionPerformed
+        // TODO add your handling code here:
+        guardarHorario();
+    }//GEN-LAST:event_btnGuardarHorarioCompletoActionPerformed
+
+    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
+        // TODO add your handling code here:
+        abrirHorario();
+    }//GEN-LAST:event_btnAbrirActionPerformed
+
+    private void btnGuardarHorarioActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarHorarioActualActionPerformed
+        // TODO add your handling code here:
+        generarListaHorario();
+    }//GEN-LAST:event_btnGuardarHorarioActualActionPerformed
+
     public void agregarMateria(Materia mat) {
         horario.agregarMateria(mat);
 
-        //Creación del checkbox en la lista.
-        JCheckBox checkMateria = new JCheckBox("(" + mat.getGrupo() + ") " + mat.getNombre());
-        checkMateria.setVisible(true);
-        checkMateria.setSize(230, 30);
-        Object[] par = {checkMateria, mat};
-        checksMaterias.add(par);
-        checkMateria.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jchecksActionPerformed(evt);
-            }
-        });
-        jpMaterias.add(checkMateria);
-        jpMaterias.updateUI();
-        jsMaterias.updateUI();
-        this.paintAll(this.getGraphics());
-        //reescribirLista();
-
-        modeloLista.addElement("(" + mat.getGrupo() + ") " + mat.getNombre());
-        jListaMaterias.setModel(modeloLista);
+        agregarCheckBox(mat);
+        actualizarInterfaz();
         limpiarHorario();
+        escribirHorario();
         generarVector();
     }
 
     private void jchecksActionPerformed(java.awt.event.ActionEvent evt) {
-        leerLista();
-        reescribirHorario();
+        limpiarHorario();
+        escribirHorario();
     }
 
     /**
@@ -412,19 +353,14 @@ public class Aplicacion extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Aplicacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Aplicacion().setVisible(true);
             }
@@ -439,26 +375,177 @@ public class Aplicacion extends javax.swing.JFrame {
     private javax.swing.JButton jBtAgregar;
     private javax.swing.JButton jBtGuardar;
     private javax.swing.JButton jBtSalir;
-    private javax.swing.JList jListaMaterias;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel jpMaterias;
     private javax.swing.JScrollPane jsMaterias;
     private javax.swing.JTable jtHorario;
     // End of variables declaration//GEN-END:variables
 
-    private void reescribirHorario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void actualizarHorario() {
+        reiniciarChecks();
+        ArrayList<Materia> materias = horario.getMaterias();
+        for (Materia mat : materias) {
+            agregarCheckBox(mat);
+        }
+        actualizarInterfaz();
     }
 
-    private void leerLista() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void guardarHorario() {
+        JFileChooser escoger = new JFileChooser();
+        int retorno = escoger.showSaveDialog(this);
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File archivo = escoger.getSelectedFile();
+            try {
+                FileOutputStream fileOut = new FileOutputStream(archivo);
+                try (ObjectOutputStream salida = new ObjectOutputStream(fileOut)) {
+                    salida.writeObject(horario);
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println(ex);
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                System.err.println(ex);
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.out.println("Cancelado.");
+        }
     }
 
+    private void abrirHorario() {
+        JFileChooser escoger = new JFileChooser();
+        int retorno = escoger.showOpenDialog(this);
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File archivo = escoger.getSelectedFile();
+            try {
+                FileInputStream fileIn = new FileInputStream(archivo);
+                ObjectInputStream entrada = new ObjectInputStream(fileIn);
+                horario = (Horario) entrada.readObject();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al leer el archivo. Archivo no encontrado o no se tienen permisos de lectura.", "Error de lectura", JOptionPane.ERROR_MESSAGE);
+                System.err.println(ex);
+                horario = new Horario();
+            } catch (IOException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al leer el archivo", "Error de lectura", JOptionPane.ERROR_MESSAGE);
+                System.err.println(ex);
+                horario = new Horario();
+            }
+            actualizarHorario();
+        }
+
+    }
+
+    private void agregarCheckBox(Materia mat) {
+        //Creación del checkbox en la lista.
+        JCheckBox checkMateria = new JCheckBox(mat.toString());
+        checkMateria.setVisible(true);
+        checkMateria.setSize(230, 30);
+        Object[] par = {checkMateria, mat};
+        checksMaterias.add(par);
+        checkMateria.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchecksActionPerformed(evt);
+            }
+        });
+        jpMaterias.add(checkMateria);
+    }
+
+    private void reiniciarChecks() {
+        checksMaterias = new ArrayList();
+        for (int i = 0; i < jpMaterias.getComponentCount(); i++) {
+            jpMaterias.remove(i);
+        }
+        actualizarInterfaz();
+    }
+
+    private void actualizarInterfaz() {
+        jpMaterias.updateUI();
+        jsMaterias.updateUI();
+        this.paintAll(this.getGraphics());
+    }
+
+    private void generarListaHorario() {
+        Horario horarioTemp = new Horario();
+        for (Object[] par : checksMaterias) {
+            JCheckBox check = (JCheckBox) par[0];
+            if (check.isSelected()) {
+                Materia mat = (Materia) par[1];
+                horarioTemp.agregarMateria(mat);
+            }
+        }
+        guardarString(horarioTemp);
+    }
+
+    private void guardarString(Horario horarioTemp) {
+        JFileChooser escoger = new JFileChooser();
+        int retorno = escoger.showSaveDialog(this);
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File archivo = escoger.getSelectedFile();
+            try {
+                FileOutputStream fileOut = new FileOutputStream(archivo);
+                try (FileWriter escritor = new FileWriter(archivo)) {
+                    escritor.write(horarioTemp.toString());
+                }
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar guardar el archivo. Archivo no encontrado o no se tienen permisos de escritura.", "Error de escritura", JOptionPane.ERROR_MESSAGE);
+                System.err.println(ex);
+                horario = new Horario();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al escribir el archivo", "Error de escritura", JOptionPane.ERROR_MESSAGE);
+                System.err.println(ex);
+                horario = new Horario();
+            }
+        } else {
+            System.out.println("Cancelado.");
+        }
+    }
+
+    private void escribirHorario() {
+        for (Object[] par : checksMaterias) {
+            JCheckBox check = (JCheckBox) par[0];
+            if (check.isSelected()) {
+                Materia mat = (Materia) par[1];
+                if (puedeAgregarATabla(mat)) {
+                    agregarATabla(mat);
+                }
+            }
+        }
+    }
+
+    private boolean puedeAgregarATabla(Materia mat) {
+        for (Clase clase : mat.getClases()) {
+            int dia = clase.getDia() + 1;
+            int horaInicio = clase.getHoraInicio();
+            int horaFin = clase.getHoraFin();
+            for (int i = horaInicio; i < horaFin; i++) {
+                if (jtHorario.getValueAt(i - 6, dia) != null) {
+                    JOptionPane.showMessageDialog(this, "En el día " + Clase.getStringDia(dia) + " las siguientes materias: \n" + mat.toString() + jtHorario.getValueAt(i - 6, dia), "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void agregarATabla(Materia mat) {
+        for (Clase clase : mat.getClases()) {
+            int dia = clase.getDia() + 1;
+            int horaInicio = clase.getHoraInicio();
+            int horaFin = clase.getHoraFin();
+            for (int i = horaInicio; i < horaFin; i++) {
+                //colores[i-6][dia] = mat.getColorFondo();
+                jtHorario.setValueAt(mat.toString(), i - 6, dia);
+                
+                //System.out.println("Color " + mat.getColorFondo());
+            }
+        }
+    }
 }

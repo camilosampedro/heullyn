@@ -7,7 +7,7 @@
 package interfaz;
 
 /**
- *
+ * Interfaz con la información de los autores.
  * @author CamiloAndrés
  */
 public class AcercaDe extends javax.swing.JFrame {

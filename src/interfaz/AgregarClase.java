@@ -8,7 +8,7 @@ package interfaz;
 import horario.Clase;
 
 /**
- *
+ * Interfaz para agregar una clase.
  * @author CamiloAndrés
  */
 public class AgregarClase extends javax.swing.JFrame {
@@ -53,6 +53,11 @@ public class AgregarClase extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Agregar materia");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +138,7 @@ public class AgregarClase extends javax.swing.JFrame {
         clase = new Clase(horaInicio, horaFin, dia);
         padre.agregarClase(clase);
         this.dispose();
+        padre.setEnabled(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -140,6 +146,11 @@ public class AgregarClase extends javax.swing.JFrame {
         this.dispose();
         padre.setEnabled(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        padre.setEnabled(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

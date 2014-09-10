@@ -54,6 +54,7 @@ public class AgregarMateria extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Agregar materia");
 
         jLabel1.setText("Nombre:");
 
