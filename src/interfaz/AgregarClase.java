@@ -13,7 +13,7 @@ import horario.Clase;
  */
 public class AgregarClase extends javax.swing.JFrame {
 
-    AgregarMateria padre;
+    AgregarGrupo padre;
     Clase clase;
 
     /**
@@ -23,7 +23,7 @@ public class AgregarClase extends javax.swing.JFrame {
         initComponents();
     }
 
-    public AgregarClase(AgregarMateria padre) {
+    public AgregarClase(AgregarGrupo padre) {
         initComponents();
         this.padre = padre;
     }

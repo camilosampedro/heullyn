@@ -21,6 +21,7 @@ public class Materia implements Serializable {
     private String nombre;
     private int creditos;
     private ArrayList<Clase> clases;
+    private ArrayList<Grupo> grupos;
     private String grupo;
     private final Color colorFondo;
 
@@ -42,28 +43,9 @@ public class Materia implements Serializable {
      * Constructor vacío.
      */
     public Materia() {
-        clases = new ArrayList();
+        grupos = new ArrayList();
+        //clases = new ArrayList();
         this.colorFondo = new Color((int) (Math.random() * 125), (int) (Math.random() * 125), (int) (Math.random() * 125));
-    }
-
-    /**
-     * Agrega la clase especificada a la materia actual.
-     *
-     * @param clase Clase a insertar.
-     * @see Clase
-     */
-    public void agregarClase(Clase clase) {
-        clases.add(clase);
-    }
-
-    /**
-     * Obtiene la lista de clases de la materia actual.
-     *
-     * @return Lista con todas las clases de la materia actual.
-     * @see ArrayList
-     */
-    public ArrayList<Clase> getClases() {
-        return clases;
     }
 
     /**
@@ -73,15 +55,6 @@ public class Materia implements Serializable {
      */
     public int getCreditos() {
         return creditos;
-    }
-
-    /**
-     * Obtiene el grupo asignado a la materia actual.
-     *
-     * @return String del grupo de la materia actual.
-     */
-    public String getGrupo() {
-        return grupo;
     }
 
     /**
@@ -139,12 +112,12 @@ public class Materia implements Serializable {
      * @return Verdadero si se cruzan, falso en caso contrario.
      */
     public boolean cruzaCon(Materia materia) {
-        Clase clase1, clase2;
-        for (int i = 0; i < materia.getClases().size(); i++) {
-            clase1 = materia.getClases().get(i);
-            for (Clase clase : clases) {
-                clase2 = clase;
-                if (clase1.cruzaCon(clase2)) {
+        Grupo grupo1;
+        for (Grupo grupo2 : materia.grupos) {
+            grupo1 = grupo2;
+            for (Grupo clase : this.grupos) {
+                grupo2 = clase;
+                if (grupo1.cruzaCon(grupo2)) {
                     return true;
                 }
             }
@@ -172,4 +145,8 @@ public class Materia implements Serializable {
     public Color getColorFondo() {
         return colorFondo;
     }
+
+    public ArrayList<Grupo> getGrupos() {
+        return grupos;
+    } 
 }

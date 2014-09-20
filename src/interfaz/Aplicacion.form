@@ -132,7 +132,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jBtAgregar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar"/>
+        <Property name="text" type="java.lang.String" value="Agregar materia"/>
         <Property name="toolTipText" type="java.lang.String" value="Agrega un bloque a la misma materia"/>
       </Properties>
       <Events>

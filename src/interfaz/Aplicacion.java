@@ -136,7 +136,7 @@ public class Aplicacion extends javax.swing.JFrame {
             }
         });
 
-        jBtAgregar.setText("Agregar");
+        jBtAgregar.setText("Agregar materia");
         jBtAgregar.setToolTipText("Agrega un bloque a la misma materia");
         jBtAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,7 +292,7 @@ public class Aplicacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtSalirActionPerformed
 
     private void jBtAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAgregarActionPerformed
-        AgregarMateria nueva = new AgregarMateria(this);
+        AgregarGrupo nueva = new AgregarGrupo(this);
         nueva.setVisible(true);
     }//GEN-LAST:event_jBtAgregarActionPerformed
 
