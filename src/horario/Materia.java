@@ -22,7 +22,6 @@ public class Materia implements Serializable {
     private int creditos;
     private ArrayList<Clase> clases;
     private ArrayList<Grupo> grupos;
-    private String grupo;
     private final Color colorFondo;
 
     /**
@@ -35,7 +34,6 @@ public class Materia implements Serializable {
     public Materia(String nombre, int creditos, String grupo) {
         this.nombre = nombre;
         this.creditos = creditos;
-        this.grupo = grupo;
         this.colorFondo = new Color((int) (255 - Math.random() * 100), (int) (255 - Math.random() * 100), (int) (255 - Math.random() * 100));
     }
 
@@ -85,15 +83,6 @@ public class Materia implements Serializable {
     }
 
     /**
-     * Asigna el grupo a la materia actual.
-     *
-     * @param grupo Nuevo grupo de la materia.
-     */
-    public void setGrupo(String grupo) {
-        this.grupo = grupo;
-    }
-
-    /**
      * Verifica si una materia es igual a otra.
      *
      * @param materia Materia con la cual comparar.
@@ -132,7 +121,11 @@ public class Materia implements Serializable {
      */
     @Override
     public String toString() {
-        return ("\t" + grupo + "\t" + nombre);
+        String texto = nombre;
+        for (Grupo grupo : grupos) {
+            texto = "\n" + texto + grupo.toString();
+        }
+        return texto;
     }
 
     /**
@@ -148,5 +141,9 @@ public class Materia implements Serializable {
 
     public ArrayList<Grupo> getGrupos() {
         return grupos;
-    } 
+    }
+
+    public void agregarGrupo(Grupo grupo) {
+        grupos.add(grupo);
+    }
 }

@@ -105,4 +105,9 @@ public class Clase implements Serializable {
         }
         return clase2.horaFin < this.horaFin && clase2.horaFin > this.horaInicio;
     }
+    
+    @Override
+    public String toString(){
+        return Clase.getStringDia(dia) + ": " + this.horaInicio + " - " + this.horaFin;
+    }
 }

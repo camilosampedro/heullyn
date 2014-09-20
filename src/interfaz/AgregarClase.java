@@ -9,6 +9,7 @@ import horario.Clase;
 
 /**
  * Interfaz para agregar una clase.
+ *
  * @author CamiloAndrés
  */
 public class AgregarClase extends javax.swing.JFrame {
@@ -54,8 +55,8 @@ public class AgregarClase extends javax.swing.JFrame {
         setTitle("Agregar materia");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -132,25 +133,32 @@ public class AgregarClase extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
-        int horaInicio = Integer.parseInt(jtfHoraInicio.getText());
-        int horaFin = Integer.parseInt(jtfHoraFin.getText());
+        int horaInicio;
+        int horaFin;
+        try {
+            horaInicio = Integer.parseInt(jtfHoraInicio.getText());
+            horaFin = Integer.parseInt(jtfHoraFin.getText());
+        } catch (NumberFormatException ex) {
+            System.err.println("Error de casting");
+            return;
+        }
         int dia = jcbDia.getSelectedIndex();
         clase = new Clase(horaInicio, horaFin, dia);
         padre.agregarClase(clase);
-        this.dispose();
         padre.setEnabled(true);
+        this.dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.dispose();
         padre.setEnabled(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         padre.setEnabled(true);
-    }//GEN-LAST:event_formWindowClosed
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

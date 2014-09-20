@@ -6,12 +6,7 @@
 package interfaz;
 
 import horario.Clase;
-import horario.Horario;
-import horario.Materia;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import javax.swing.JOptionPane;
+import horario.Grupo;
 
 /**
  *
@@ -19,20 +14,21 @@ import javax.swing.JOptionPane;
  */
 public class AgregarGrupo extends javax.swing.JFrame {
 
-    private Aplicacion app;
-    private Materia mat;
+    private AgregarMateria padre;
+    private final Grupo grupo;
 
     /**
      * Creates new form AgregarMateria
      */
     private AgregarGrupo() {
         initComponents();
+        grupo = new Grupo();
     }
 
-    public AgregarGrupo(Aplicacion p) {
+    public AgregarGrupo(AgregarMateria p) {
         initComponents();
-        app = p;
-        mat = new Materia();
+        padre = p;
+        grupo = new Grupo();
     }
 
     /**
@@ -44,19 +40,19 @@ public class AgregarGrupo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jtfNombre = new javax.swing.JTextField();
         btnAgregarClase = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jtfGrupo = new javax.swing.JTextField();
-        btnAgregarMateria = new javax.swing.JButton();
-        jtfCreditos = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        btnAgregarGrupo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Agregar materia");
-
-        jLabel1.setText("Nombre:");
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btnAgregarClase.setText("Agregar clase");
         btnAgregarClase.addActionListener(new java.awt.event.ActionListener() {
@@ -67,14 +63,12 @@ public class AgregarGrupo extends javax.swing.JFrame {
 
         jLabel2.setText("Grupo:");
 
-        btnAgregarMateria.setText("Agregar materia");
-        btnAgregarMateria.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarGrupo.setText("Agregar grupo");
+        btnAgregarGrupo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarMateriaActionPerformed(evt);
+                btnAgregarGrupoActionPerformed(evt);
             }
         });
-
-        jLabel3.setText("Créditos:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,18 +77,13 @@ public class AgregarGrupo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAgregarMateria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(btnAgregarGrupo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAgregarClase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfCreditos)
-                            .addComponent(jtfGrupo)
-                            .addComponent(jtfNombre))))
+                        .addComponent(jtfGrupo)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -102,49 +91,27 @@ public class AgregarGrupo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jtfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jtfGrupo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jtfCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAgregarClase)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAgregarMateria)
+                .addComponent(btnAgregarGrupo)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMateriaActionPerformed
+    private void btnAgregarGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarGrupoActionPerformed
         // TODO add your handling code here:
-        String nombre = jtfNombre.getText();
-        int creditos = Integer.parseInt(jtfCreditos.getText());
-        String grupo = jtfGrupo.getText();
-        mat.setNombre(nombre);
-        mat.setCreditos(creditos);
-        mat.setGrupo(grupo);
-
-        switch (app.getHorario().existe(mat)) {
-            case Horario.CRUZA:
-                JOptionPane.showMessageDialog(null, "La materia cruza con otra", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            case Horario.YAEXISTE:
-                JOptionPane.showMessageDialog(null, "Materia y horario existente", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            case Horario.PUEDE:
-            //Puede insertar!
-        }
-
-        app.agregarMateria(mat);
+        String strGrupo = jtfGrupo.getText();
+        grupo.setMateria(padre.getMateria());
+        grupo.setGrupo(strGrupo);
+        padre.agregarGrupo(grupo);
+        padre.setEnabled(true);
         this.dispose();
-    }//GEN-LAST:event_btnAgregarMateriaActionPerformed
+    }//GEN-LAST:event_btnAgregarGrupoActionPerformed
 
     private void btnAgregarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClaseActionPerformed
         // TODO add your handling code here:
@@ -153,27 +120,10 @@ public class AgregarGrupo extends javax.swing.JFrame {
         this.setEnabled(false);
     }//GEN-LAST:event_btnAgregarClaseActionPerformed
 
-    public void agregarClase(Clase clase) {
-        mat.agregarClase(clase);
-    }
-
-    public boolean SaveFile(String FilePath, String FileContent, boolean CleanFileContent) {
-        FileWriter file;
-        BufferedWriter writer;
-
-        try {
-            file = new FileWriter(FilePath, !CleanFileContent);
-            writer = new BufferedWriter(file);
-            writer.write(FileContent, 0, FileContent.length());
-
-            writer.close();
-            file.close();
-
-            return true;
-        } catch (IOException ex) {
-            return false;
-        }
-    }
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        padre.setEnabled(true);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -213,12 +163,12 @@ public class AgregarGrupo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarClase;
-    private javax.swing.JButton btnAgregarMateria;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnAgregarGrupo;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jtfCreditos;
     private javax.swing.JTextField jtfGrupo;
-    private javax.swing.JTextField jtfNombre;
     // End of variables declaration//GEN-END:variables
+
+    public void agregarClase(Clase clase) {
+        this.grupo.agregarClase(clase);
+    }
 }

@@ -7,10 +7,9 @@ package interfaz;
 
 import render.Renderer;
 import horario.Clase;
+import horario.Grupo;
 import horario.Horario;
 import horario.Materia;
-import java.awt.Color;
-import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -157,29 +156,29 @@ public class Aplicacion extends javax.swing.JFrame {
         jtHorario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jtHorario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"6", null, null, null, null, null, null},
-                {"7", null, null, null, null, null, null},
-                {"8", null, null, null, null, null, null},
-                {"9", null, null, null, null, null, null},
-                {"10", null, null, null, null, null, null},
-                {"11", null, null, null, null, null, null},
-                {"12", null, null, null, null, null, null},
-                {"13", null, null, null, null, null, null},
-                {"14", null, null, null, null, null, null},
-                {"15", null, null, null, null, null, null},
-                {"16", null, null, null, null, null, null},
-                {"17", null, null, null, null, null, null},
-                {"18", null, null, null, null, null, null},
-                {"19", null, null, null, null, null, null},
-                {"20", null, null, null, null, null, null},
-                {"21", null, null, null, null, null, null}
+                {"6 am", null, null, null, null, null, null},
+                {"7 am", null, null, null, null, null, null},
+                {"8 am", null, null, null, null, null, null},
+                {"9 am", null, null, null, null, null, null},
+                {"10 am", null, null, null, null, null, null},
+                {"11 am", null, null, null, null, null, null},
+                {"12 pm", null, null, null, null, null, null},
+                {"1 pm", null, null, null, null, null, null},
+                {"2 pm", null, null, null, null, null, null},
+                {"3 pm", null, null, null, null, null, null},
+                {"4 pm", null, null, null, null, null, null},
+                {"5 pm", null, null, null, null, null, null},
+                {"6 pm", null, null, null, null, null, null},
+                {"7 pm", null, null, null, null, null, null},
+                {"8 pm", null, null, null, null, null, null},
+                {"9 pm", null, null, null, null, null, null}
             },
             new String [] {
                 "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, true, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -190,6 +189,7 @@ public class Aplicacion extends javax.swing.JFrame {
         jtHorario.setGridColor(new java.awt.Color(76, 76, 76));
         jtHorario.setRowMargin(2);
         jScrollPane1.setViewportView(jtHorario);
+        jtHorario.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jTabbedPane1.addTab("Horario", jScrollPane1);
 
@@ -292,8 +292,9 @@ public class Aplicacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtSalirActionPerformed
 
     private void jBtAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAgregarActionPerformed
-        AgregarGrupo nueva = new AgregarGrupo(this);
+        AgregarMateria nueva = new AgregarMateria(this);
         nueva.setVisible(true);
+        this.setEnabled(false);
     }//GEN-LAST:event_jBtAgregarActionPerformed
 
     private void jBtGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtGuardarActionPerformed
@@ -325,7 +326,9 @@ public class Aplicacion extends javax.swing.JFrame {
     public void agregarMateria(Materia mat) {
         horario.agregarMateria(mat);
 
-        agregarCheckBox(mat);
+        for (Grupo grupo : mat.getGrupos()) {
+            agregarCheckBox(grupo);
+        }
         actualizarInterfaz();
         limpiarHorario();
         escribirHorario();
@@ -392,7 +395,9 @@ public class Aplicacion extends javax.swing.JFrame {
         reiniciarChecks();
         ArrayList<Materia> materias = horario.getMaterias();
         for (Materia mat : materias) {
-            agregarCheckBox(mat);
+            for (Grupo grupo : mat.getGrupos()) {
+                agregarCheckBox(grupo);
+            }
         }
         actualizarInterfaz();
     }
@@ -442,12 +447,12 @@ public class Aplicacion extends javax.swing.JFrame {
 
     }
 
-    private void agregarCheckBox(Materia mat) {
+    private void agregarCheckBox(Grupo grupo) {
         //Creación del checkbox en la lista.
-        JCheckBox checkMateria = new JCheckBox(mat.toString());
+        JCheckBox checkMateria = new JCheckBox(grupo.aCheckBox());
         checkMateria.setVisible(true);
         checkMateria.setSize(230, 30);
-        Object[] par = {checkMateria, mat};
+        Object[] par = {checkMateria, grupo};
         checksMaterias.add(par);
         checkMateria.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -477,8 +482,8 @@ public class Aplicacion extends javax.swing.JFrame {
         for (Object[] par : checksMaterias) {
             JCheckBox check = (JCheckBox) par[0];
             if (check.isSelected()) {
-                Materia mat = (Materia) par[1];
-                horarioTemp.agregarMateria(mat);
+                Grupo grupo = (Grupo) par[1];
+                horarioTemp.agregarMateria(grupo.getMateria());
             }
         }
         guardarString(horarioTemp);
@@ -512,22 +517,22 @@ public class Aplicacion extends javax.swing.JFrame {
         for (Object[] par : checksMaterias) {
             JCheckBox check = (JCheckBox) par[0];
             if (check.isSelected()) {
-                Materia mat = (Materia) par[1];
-                if (puedeAgregarATabla(mat)) {
-                    agregarATabla(mat);
+                Grupo grupo = (Grupo) par[1];
+                if (puedeAgregarATabla(grupo)) {
+                    agregarATabla(grupo);
                 }
             }
         }
     }
 
-    private boolean puedeAgregarATabla(Materia mat) {
-        for (Clase clase : mat.getClases()) {
+    private boolean puedeAgregarATabla(Grupo grupo) {
+        for (Clase clase : grupo.getClases()) {
             int dia = clase.getDia() + 1;
             int horaInicio = clase.getHoraInicio();
             int horaFin = clase.getHoraFin();
             for (int i = horaInicio; i < horaFin; i++) {
                 if (jtHorario.getValueAt(i - 6, dia) != null) {
-                    JOptionPane.showMessageDialog(this, "En el día " + Clase.getStringDia(dia) + " las siguientes materias: \n" + mat.toString() + jtHorario.getValueAt(i - 6, dia), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "En el día " + Clase.getStringDia(dia) + " las siguientes materias: \n" + grupo.toString() + jtHorario.getValueAt(i - 6, dia), "Error", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
             }
@@ -535,15 +540,15 @@ public class Aplicacion extends javax.swing.JFrame {
         return true;
     }
 
-    private void agregarATabla(Materia mat) {
-        for (Clase clase : mat.getClases()) {
+    private void agregarATabla(Grupo grupo) {
+        for (Clase clase : grupo.getClases()) {
             int dia = clase.getDia() + 1;
             int horaInicio = clase.getHoraInicio();
             int horaFin = clase.getHoraFin();
             for (int i = horaInicio; i < horaFin; i++) {
                 //colores[i-6][dia] = mat.getColorFondo();
-                jtHorario.setValueAt(mat.toString(), i - 6, dia);
-                
+                jtHorario.setValueAt(grupo.aCheckBox(), i - 6, dia);
+
                 //System.out.println("Color " + mat.getColorFondo());
             }
         }
