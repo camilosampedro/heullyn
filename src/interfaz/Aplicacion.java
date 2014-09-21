@@ -5,11 +5,12 @@
  */
 package interfaz;
 
-import render.Renderer;
 import horario.Clase;
 import horario.Grupo;
 import horario.Horario;
 import horario.Materia;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,7 +26,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -33,43 +33,41 @@ import javax.swing.table.TableModel;
  */
 public class Aplicacion extends javax.swing.JFrame {
 
-    private final DefaultListModel modeloLista;
-    private final boolean[] vectorFlag;
-    private final int cantidad;
     private Horario horario;
     private ArrayList<Object[]> checksMaterias;
     //ArrayList<ArrayList<Color>> colores;
-    Renderer render = new Renderer();
 
+    /*
     public void generarVector() {
         for (int i = 0; i < vectorFlag.length; i++) {
             vectorFlag[i] = false;
         }
     }
+    */
 
     public Horario getHorario() {
         return horario;
     }
 
     public void limpiarHorario() {
-        jtHorario.setModel(new javax.swing.table.DefaultTableModel(
+        modeloTabla = new javax.swing.table.DefaultTableModel(
                 new Object[][]{
-                    {"6", null, null, null, null, null, null},
-                    {"7", null, null, null, null, null, null},
-                    {"8", null, null, null, null, null, null},
-                    {"9", null, null, null, null, null, null},
-                    {"10", null, null, null, null, null, null},
-                    {"11", null, null, null, null, null, null},
-                    {"12", null, null, null, null, null, null},
-                    {"13", null, null, null, null, null, null},
-                    {"14", null, null, null, null, null, null},
-                    {"15", null, null, null, null, null, null},
-                    {"16", null, null, null, null, null, null},
-                    {"17", null, null, null, null, null, null},
-                    {"18", null, null, null, null, null, null},
-                    {"19", null, null, null, null, null, null},
-                    {"20", null, null, null, null, null, null},
-                    {"21", null, null, null, null, null, null}
+                    {"6:00", null, null, null, null, null, null},
+                    {"7:00", null, null, null, null, null, null},
+                    {"8:00", null, null, null, null, null, null},
+                    {"9:00", null, null, null, null, null, null},
+                    {"10:00", null, null, null, null, null, null},
+                    {"11:00", null, null, null, null, null, null},
+                    {"12:00", null, null, null, null, null, null},
+                    {"13:00", null, null, null, null, null, null},
+                    {"14:00", null, null, null, null, null, null},
+                    {"15:00", null, null, null, null, null, null},
+                    {"16:00", null, null, null, null, null, null},
+                    {"17:00", null, null, null, null, null, null},
+                    {"18:00", null, null, null, null, null, null},
+                    {"19:00", null, null, null, null, null, null},
+                    {"20:00", null, null, null, null, null, null},
+                    {"21:00", null, null, null, null, null, null}
                 },
                 new String[]{
                     "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
@@ -83,18 +81,15 @@ public class Aplicacion extends javax.swing.JFrame {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
-        });
+        };
+        jtHorario.setModel(modeloTabla);
     }
 
     public Aplicacion() {
         initComponents();
-        modeloLista = new DefaultListModel();
-        vectorFlag = new boolean[100];
-        cantidad = 0;
         horario = new Horario();
         checksMaterias = new ArrayList();
-        generarVector();
-
+        //generarVector();
     }
 
     /**
@@ -127,6 +122,7 @@ public class Aplicacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Horario");
+        setIconImage(Toolkit.getDefaultToolkit().getImage("src/icono.png"));
 
         jBtSalir.setText("Salir");
         jBtSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -152,39 +148,8 @@ public class Aplicacion extends javax.swing.JFrame {
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
 
-        //jtHorario.setDefaultRenderer(Object.class, render);
         jtHorario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jtHorario.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"6 am", null, null, null, null, null, null},
-                {"7 am", null, null, null, null, null, null},
-                {"8 am", null, null, null, null, null, null},
-                {"9 am", null, null, null, null, null, null},
-                {"10 am", null, null, null, null, null, null},
-                {"11 am", null, null, null, null, null, null},
-                {"12 pm", null, null, null, null, null, null},
-                {"1 pm", null, null, null, null, null, null},
-                {"2 pm", null, null, null, null, null, null},
-                {"3 pm", null, null, null, null, null, null},
-                {"4 pm", null, null, null, null, null, null},
-                {"5 pm", null, null, null, null, null, null},
-                {"6 pm", null, null, null, null, null, null},
-                {"7 pm", null, null, null, null, null, null},
-                {"8 pm", null, null, null, null, null, null},
-                {"9 pm", null, null, null, null, null, null}
-            },
-            new String [] {
-                "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jtHorario.setModel(modeloTabla);
         jtHorario.setColumnSelectionAllowed(true);
         jtHorario.setGridColor(new java.awt.Color(76, 76, 76));
         jtHorario.setRowMargin(2);
@@ -273,7 +238,7 @@ public class Aplicacion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtSalir)
@@ -299,7 +264,7 @@ public class Aplicacion extends javax.swing.JFrame {
 
     private void jBtGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtGuardarActionPerformed
         limpiarHorario();
-        generarVector();
+        //generarVector();
     }//GEN-LAST:event_jBtGuardarActionPerformed
 
     private void btnAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaDeActionPerformed
@@ -332,7 +297,7 @@ public class Aplicacion extends javax.swing.JFrame {
         actualizarInterfaz();
         limpiarHorario();
         escribirHorario();
-        generarVector();
+        //generarVector();
     }
 
     private void jchecksActionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,6 +356,39 @@ public class Aplicacion extends javax.swing.JFrame {
     private javax.swing.JTable jtHorario;
     // End of variables declaration//GEN-END:variables
 
+    private javax.swing.table.DefaultTableModel modeloTabla = new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                    {"6:00", null, null, null, null, null, null},
+                    {"7:00", null, null, null, null, null, null},
+                    {"8:00", null, null, null, null, null, null},
+                    {"9:00", null, null, null, null, null, null},
+                    {"10:00", null, null, null, null, null, null},
+                    {"11:00", null, null, null, null, null, null},
+                    {"12:00", null, null, null, null, null, null},
+                    {"13:00", null, null, null, null, null, null},
+                    {"14:00", null, null, null, null, null, null},
+                    {"15:00", null, null, null, null, null, null},
+                    {"16:00", null, null, null, null, null, null},
+                    {"17:00", null, null, null, null, null, null},
+                    {"18:00", null, null, null, null, null, null},
+                    {"19:00", null, null, null, null, null, null},
+                    {"20:00", null, null, null, null, null, null},
+                    {"21:00", null, null, null, null, null, null}
+                },
+                new String[]{
+                    "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+    
     private void actualizarHorario() {
         reiniciarChecks();
         ArrayList<Materia> materias = horario.getMaterias();

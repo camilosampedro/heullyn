@@ -5,17 +5,17 @@
  */
 package horario;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import javax.swing.Icon;
 
 /**
  *
  * @author camilo
  */
-public class Grupo {
+public class Grupo implements Serializable{
 
     private Materia materia;
-    private ArrayList<Clase> clases;
+    private final ArrayList<Clase> clases;
     private String grupo;
     
     public Grupo() {
