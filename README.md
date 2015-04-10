@@ -1,4 +1,4 @@
 heullyn
 =======
 
-First repository of applications
+Schedule organizer
